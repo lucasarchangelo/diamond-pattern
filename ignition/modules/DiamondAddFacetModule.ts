@@ -23,13 +23,13 @@ const DiamondAddFacetModule = buildModule("DiamondAddFacetModule", (m) => {
 
     // Include method selectors for each facet
     const facet1Selectors = [
-        toFunctionSelector("function setFacet1(string memory _value)"),
-        toFunctionSelector("function getFacet1()"),
+        toFunctionSelector("function setFacet1(uint256 _position, string memory _value)"),
+        toFunctionSelector("function getFacet1(uint256 _position)"),
     ];
 
     const facet2Selectors = [
-        toFunctionSelector("function setFacet2(string memory _value)"),
-        toFunctionSelector("function getFacet2()"),
+        toFunctionSelector("function setFacet2(uint256 _position, string memory _value)"),
+        toFunctionSelector("function getFacet2(uint256 _position)"),
     ];
 
     // create an array of facet cut actions

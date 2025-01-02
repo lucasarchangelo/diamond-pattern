@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "deploy_diamond": "npx hardhat run scripts/diamond.ts",
     "deploy": "npx hardhat ignition deploy ignition/modules/DiamondAddFacetModule.ts",
     "test": "npx hardhat test"
   },

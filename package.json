@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "deploy": "npx hardhat ignition deploy ignition/modules/DiamondAddFacetModule.ts",
-    "test": "npx hardhat test"
+    "deploy": "npx hardhat ignition deploy ignition/modules/DiamondAddFacetModule.ts --network localhost",
+    "deploy_v2": "npx hardhat ignition deploy ignition/modules/DiamondAddFacet3Module.ts --network localhost",
+    "test": "npx hardhat test --network localhost"
   },
   "keywords": [],
   "author": "",

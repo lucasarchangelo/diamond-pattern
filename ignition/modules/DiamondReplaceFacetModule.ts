@@ -4,8 +4,7 @@ import { toFunctionSelector, zeroAddress } from "viem";
 
 import DiamondModule from "./DiamondModule";
 import Facet1Module from "./facets/Facet1Module";
-import Facet2Module from "./facets/Facet2Module";
-import Facet3Module from "./facets/Facet3Module";
+import Facet1V2Module from "./facets/Facet1V2Module";
 
 const FacetCutAction = {
     Add: 0,
@@ -16,42 +15,41 @@ const FacetCutAction = {
 const DiamondAddFacetModule = buildModule("DiamondAddFacetModule", (m) => {
     // get facets
     const { facet1 } = m.useModule(Facet1Module);
-    const { facet2 } = m.useModule(Facet2Module);
-    const { facet3 } = m.useModule(Facet3Module);
+    const { facet1V2 } = m.useModule(Facet1V2Module);
 
     // get diamond cut interface using diamond address
     const { diamond } = m.useModule(DiamondModule);
     const proxyDiamond = m.contractAt("DiamondCutFacet", diamond);
 
-    // Include method selectors for each facet
-    const facet1Selectors = [
+    // Remove method selectors for each old facet
+    const facet1SelectorsRemove = [
         toFunctionSelector("function setFacet1(uint256 _position, string memory _name)"),
         toFunctionSelector("function getFacet1(uint256 _position)"),
     ];
 
-    const facet2Selectors = [
-        toFunctionSelector("function setFacet2(uint256 _position, string memory _name)"),
-        toFunctionSelector("function getFacet2(uint256 _position)"),
+    // Include method selectors for each facet
+    const facet1Selectors = [
+        toFunctionSelector("function setFacet1(uint256 _position, string memory _name, uint8 _age)"),
+        toFunctionSelector("function getFacet1(uint256 _position)"),
     ];
 
     // create an array of facet cut actions
     const facetCutActions = [{
         facetAddress: facet1,
-        action: FacetCutAction.Add,
-        functionSelectors: facet1Selectors,
+        action: FacetCutAction.Remove,
+        functionSelectors: facet1SelectorsRemove,
     },
     {
-        facetAddress: facet2,
+        facetAddress: facet1V2,
         action: FacetCutAction.Add,
-        functionSelectors: facet2Selectors,
+        functionSelectors: facet1Selectors,
     }];
 
     // call diamond cut method on diamond contract as proxy
     m.call(proxyDiamond, "diamondCut", [facetCutActions, zeroAddress, "0x"]);
-    const proxyFacet1 = m.contractAt("Facet1", diamond, { id: "Facet1Proxy"});
-    const proxyFacet2 = m.contractAt("Facet2", diamond, { id: "Facet2Proxy"});
+    const proxyFacet1V2 = m.contractAt("Facet1V2", diamond, { id: "Facet1V2Proxy"});
 
-    return { proxyFacet1, proxyFacet2, diamond };
+    return { proxyFacet1V2, diamond };
 });
 
 export default DiamondAddFacetModule;
